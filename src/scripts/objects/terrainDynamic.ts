@@ -191,14 +191,20 @@ export default class Terrain {
             isStatic: true,
             friction: 0.7
         },
-        true,
-        0.01,
-        1
+        true,  // flagInternal
+        true,  // removeCollinear (was 0.01)
+        1      // minimumArea
     )
 
-    // Set position
-    let centerOfMass = Matter.Vector.sub(terrainBody.bounds.min, terrainBody.position)
-    Matter.Body.setPosition(terrainBody, { x: Math.abs(centerOfMass.x) + x, y: Math.abs(centerOfMass.y) + y })
+    // Set position using type assertion for Matter.Body
+    let centerOfMass = Matter.Vector.sub(
+        (terrainBody as any).bounds.min, 
+        (terrainBody as any).position
+    )
+    Matter.Body.setPosition(terrainBody, { 
+        x: Math.abs(centerOfMass.x) + x, 
+        y: Math.abs(centerOfMass.y) + y 
+    })
   }
 
   update() {
